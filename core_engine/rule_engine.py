@@ -1,15 +1,18 @@
 import json
-from typing import List
 
-def apply_rules(byte_list: List[int], rules_path: str = "logic/rules.json") -> List[str]:
-    with open(rules_path, "r") as file:
-        rules = json.load(file)
+def apply_rules_from_file(byte_values: list[int], rule_file_path: str) -> list[str]:
+    """
+    Applies rules from a JSON file to a list of byte values.
+    Converts byte values into characters based on the rules.
 
-    results = []
-    for byte in byte_list:
-        rule = rules.get(str(byte))
-        if rule:
-            results.append(rule)
-        else:
-            results.append(f"UNKNOWN({byte})")
-    return results
+    Example rule file format:
+    {
+        "65": "A",
+        "66": "B",
+        "97": "a"
+    }
+    """
+    with open(rule_file_path, "r") as f:
+        rules = json.load(f)
+
+    return [rules.get(str(byte), '?') for byte in byte_values]
